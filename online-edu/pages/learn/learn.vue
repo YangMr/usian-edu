@@ -1,23 +1,18 @@
 <template>
-	<view class="container">
-		<!-- 搜索框 -->
-		<i-search-bar></i-search-bar>
+	<view>
+		学习
 	</view>
 </template>
 
 <script>
-	
 	export default {
 		data() {
 			return {
 				
 			}
 		},
-		onLoad() {
-
-		},
 		methods: {
-
+			
 		}
 	}
 </script>
