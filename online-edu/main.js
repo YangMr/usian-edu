@@ -1,8 +1,13 @@
 import App from './App'
 
+
 // #ifndef VUE3
 import Vue from 'vue'
 Vue.config.productionTip = false
+
+import navigate from "@/utils/navigate"
+Vue.prototype.navigator = navigate
+
 App.mpType = 'app'
 const app = new Vue({
     ...App
