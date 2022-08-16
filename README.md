@@ -872,29 +872,1159 @@
 
 ### 4.5 公共列表组件开发
 
+`commom/common.css`
+
+```css
+/* 分割线 */
+.divider{
+	height: 15rpx;
+	background-color: #f5f5f3;
+}
+```
+
+`pages/index/index.vue`
+
+```vue
+<template>
+	<view>
+		
+		<f-search-bar></f-search-bar>
+		
+		
+		<swiper :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" style="height: 310rpx;">
+			<swiper-item class="flex justify-center" v-for="(item,index) in swiper" :key="index">
+				<image :src="item.src" mode="aspectFill" style="width: 720rpx;height: 300rpx;" class="rounded shadow"></image>
+			</swiper-item>
+		</swiper>
+		
+		<icon-nav :list="iconNav"></icon-nav>
+		
+		
+		<coupon-list></coupon-list>
+		
+		
+		<view class="divider"></view>
+		<view class="flex align-center py-3 px-2">
+			<text class="font-md font-weight-bold">拼团</text>
+		</view>
+		<scroll-view scroll-x="true" class="scroll-row">
+			<course-list v-for="(item,index) in groupList" :key="index" :item="item"></course-list>
+		</scroll-view>
+		
+		<view class="divider"></view>
+		<view class="flex align-center justify-between py-3 px-2">
+			<text class="font-md font-weight-bold">最新课程</text>
+			<text class="font-sm text-light-muted">查看更新</text>
+		</view>
+		<view>
+			<course-list type="one" v-for="(item,index) in list" :key="index" :item="item"></course-list>
+		</view>
+		
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				swiper:[{
+					src:"/static/demo/banner/banner1.png"
+				},{
+					src:"/static/demo/banner/banner2.png"
+				}],
+				iconNav:[{
+					src:"/static/demo/icon/hd.png",
+					name:"活动",
+				},{ 
+					src:"/static/demo/icon/test.png",
+					name:"考试",
+				},{
+					src:"/static/demo/icon/ms.png",
+					name:"秒杀",
+				},{
+					src:"/static/demo/icon/pt.png",
+					name:"拼团",
+				},{
+					src:"/static/demo/icon/course.png",
+					name:"直播",
+				},{
+					src:"/static/demo/icon/column.png",
+					name:"专栏",
+				},{
+					src:"/static/demo/icon/book.png",
+					name:"电子书",
+				},{
+					src:"/static/demo/icon/ask.png",
+					name:"社区",
+				}],
+				groupList:[{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				},{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				}],
+				
+				list:[{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				},{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				}]
+			}
+		},
+		methods: {
+
+		}
+	}
+</script>
+
+<style>
+	
+</style>
+
+```
+
+`components/course-list/course-list.vue`
+
+```vue
+<template>
+	<view class="scroll-row-item course" :class="'course-'+this.type">
+		<view class="position-relative">
+			<image :src="item.cover"></image>
+			<view class="text-white font-sm">{{ item.type | formatType }}</view>
+		</view>
+		<view class="flex flex-column flex-shrink">
+			<text class="text-ellipsis font-md">{{ item.title }}</text>
+			<view class="font-sm text-light-muted my-1">10人已抢</view>
+			<view class="flex flex-1 align-end">
+				<text class="font-md text-danger">￥{{ item.price }}</text>
+				<text class="font-sm text-light-muted">￥{{ item.t_price }}</text>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+	let opt = {
+		media:"图文",
+		audio:"音频",
+		video:"视频",
+		column:"专栏"
+	}
+	export default {
+		name:"course-list",
+		props: {
+			item: Object,
+			type:{
+				type:String,
+				default:"two"
+			}
+		},
+		filters: {
+			formatType(k) {
+				return opt[k];
+			}
+		},
+		data() {
+			return {
+				
+			};
+		}
+	}
+</script>
+
+<style>
+.course{
+	
+}
+.course-two{
+	width: 340rpx;
+	margin-left: 20rpx;
+	margin-bottom: 20rpx;
+}
+.course-two>view:last-child>text:first-child{
+	margin-top: 10rpx;
+}
+.course-two image,.course-two>view:first-child{
+	width: 340rpx;
+	height: 180rpx;
+}
+.course>view:first-child>view{
+	position: absolute;
+	right: 10rpx;
+	bottom: 10rpx;
+	background-color: rgba(0,0,0,0.4);
+	padding: 0 10rpx;
+}
+.course-one{
+	display: flex!important;
+	padding: 20rpx;
+}
+.course-one>view:first-child{
+	margin-right: 20rpx;
+}
+.course-one image,.course-one>view:first-child{
+	width: 300rpx;
+	height: 170rpx;
+	flex-shrink: 1;
+}
+</style>
+
+```
+
 ### 4.6 首页数据交互
+
+`pages/index/index.vue`
+
+```vue
+<template>
+	<view>
+		<block v-for="(item,index) in templates" :key="index">
+			<f-search-bar v-if="item.type == 'search'" :placeholder="item.placeholder"></f-search-bar>
+			<swiper v-else-if="item.type == 'swiper'" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" style="height: 310rpx;">
+				<swiper-item class="flex justify-center" v-for="(s,sI) in item.data" :key="sI">
+					<image :src="s.src" mode="aspectFill" style="width: 720rpx;height: 300rpx;" class="rounded shadow"></image>
+				</swiper-item>
+			</swiper>
+			<icon-nav v-else-if="item.type == 'icons'" :list="item.data"></icon-nav>
+			<coupon-list v-else-if="item.type == 'coupon'"></coupon-list>
+			
+			<template v-else-if="item.type == 'promotion'">
+				<view class="divider"></view>
+				<view class="flex align-center py-3 px-2">
+					<text class="font-md font-weight-bold">{{ item.listType == 'group' ? '拼团' : '秒杀' }}</text>
+				</view>
+				<scroll-view scroll-x="true" class="scroll-row">
+					<course-list v-for="(item,index) in groupList" :key="index" :item="item"></course-list>
+				</scroll-view>
+			</template>
+			<template v-else-if="item.type == 'list'">
+				<view class="divider"></view>
+				<view class="flex align-center justify-between py-3 px-2">
+					<text class="font-md font-weight-bold">{{ item.title }}</text>
+					<text class="font-sm text-light-muted" v-if="item.showMore">查看更新</text>
+				</view>
+				<view>
+					<course-list :type="item.listType" v-for="(item,index) in item.data" :key="index" :item="item"></course-list>
+				</view>
+			</template>
+			<template v-else-if="item.type == 'imageAd'">
+				<view class="divider"></view>
+				<image :src="item.data" mode="aspectFill" style="width: 750rpx;height: 360rpx;"></image>
+			</template>
+		</block>
+
+		
+		
+		
+		
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				groupList:[{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				},{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				}],
+				
+				templates:[]
+			}
+		},
+		created() {
+			this.getData()
+		},
+		methods: {
+			getData(){
+				uni.request({
+					url: 'http://ceshi8.dishaxy.com/mobile/index',
+					method: 'GET',
+					header:{
+						appid:"bd9d01ecc75dbbaaefce"
+					},
+					success: res => {
+						console.log(res.data.data);
+						if(res.statusCode != 200){
+							uni.showToast({
+								title: res.data.data || '请求失败',
+								icon: 'none'
+							});
+							return
+						}
+						this.templates = res.data.data
+					},
+					fail: (err) => {
+						console.log(err);
+					},
+					complete: () => {}
+				});
+			}
+		}
+	}
+</script>
+
+<style>
+	
+</style>
+
+```
 
 ### 4.7 首页下拉刷新功能开发
 
+`pages/index/index.vue`
+
+```vue
+<template>
+	<view>
+		<block v-for="(item,index) in templates" :key="index">
+			<f-search-bar v-if="item.type == 'search'" :placeholder="item.placeholder"></f-search-bar>
+			<swiper v-else-if="item.type == 'swiper'" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" style="height: 310rpx;">
+				<swiper-item class="flex justify-center" v-for="(s,sI) in item.data" :key="sI">
+					<image :src="s.src" mode="aspectFill" style="width: 720rpx;height: 300rpx;" class="rounded shadow"></image>
+				</swiper-item>
+			</swiper>
+			<icon-nav v-else-if="item.type == 'icons'" :list="item.data"></icon-nav>
+			<coupon-list v-else-if="item.type == 'coupon'"></coupon-list>
+			
+			<template v-else-if="item.type == 'promotion'">
+				<view class="divider"></view>
+				<view class="flex align-center py-3 px-2">
+					<text class="font-md font-weight-bold">{{ item.listType == 'group' ? '拼团' : '秒杀' }}</text>
+				</view>
+				<scroll-view scroll-x="true" class="scroll-row">
+					<course-list v-for="(item,index) in groupList" :key="index" :item="item"></course-list>
+				</scroll-view>
+			</template>
+			<template v-else-if="item.type == 'list'">
+				<view class="divider"></view>
+				<view class="flex align-center justify-between py-3 px-2">
+					<text class="font-md font-weight-bold">{{ item.title }}</text>
+					<text class="font-sm text-light-muted" v-if="item.showMore">查看更新</text>
+				</view>
+				<view>
+					<course-list :type="item.listType" v-for="(item,index) in item.data" :key="index" :item="item"></course-list>
+				</view>
+			</template>
+			<template v-else-if="item.type == 'imageAd'">
+				<view class="divider"></view>
+				<image :src="item.data" mode="aspectFill" style="width: 750rpx;height: 360rpx;"></image>
+			</template>
+		</block>
+
+		
+		
+		
+		
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				groupList:[{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				},{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				}],
+				
+				templates:[]
+			}
+		},
+		onPullDownRefresh() {
+			this.getData()
+		},
+		created() {
+			this.getData()
+		},
+		methods: {
+			getData(){
+				uni.request({
+					url: 'http://ceshi8.dishaxy.com/mobile/index',
+					method: 'GET',
+					header:{
+						appid:"bd9d01ecc75dbbaaefce"
+					},
+					success: res => {
+						if(res.statusCode != 200 || res.data.msg == 'fail'){
+							uni.showToast({
+								title: res.data.data || '请求失败',
+								icon: 'none'
+							});
+							return
+						}
+						this.templates = res.data.data
+					},
+					fail: (err) => {
+						console.log(err);
+					},
+					complete: () => {
+						uni.stopPullDownRefresh()
+					}
+				});
+			}
+		}
+	}
+</script>
+
+<style>
+	
+</style>
+
+```
+
+
+
 ### 4.8 请求拦截器封装
+
+`api/request.js`
+
+```javascript
+export default {
+	config:{
+		// 请求拦截器
+		beforeRequest(options = {}){
+			return new Promise((resolve,reject)=>{
+				console.log('请求拦截器');
+				options.url = 'http://ceshi8.dishaxy.com' + options.url 
+				options.method = options.method || 'GET'
+				options.header = {
+					appid:"bd9d01ecc75dbbaaefce"
+				}
+				resolve(options)
+			})
+		}
+	},
+	request(options = {}){
+		return this.config.beforeRequest(options).then(opt=>{
+			return uni.request(opt)
+		})
+	}
+}
+```
+
+`pages/index/index.vue`
+
+```vue
+<template>
+	<view>
+		<block v-for="(item,index) in templates" :key="index">
+			<f-search-bar v-if="item.type == 'search'" :placeholder="item.placeholder"></f-search-bar>
+			<swiper v-else-if="item.type == 'swiper'" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" style="height: 310rpx;">
+				<swiper-item class="flex justify-center" v-for="(s,sI) in item.data" :key="sI">
+					<image :src="s.src" mode="aspectFill" style="width: 720rpx;height: 300rpx;" class="rounded shadow"></image>
+				</swiper-item>
+			</swiper>
+			<icon-nav v-else-if="item.type == 'icons'" :list="item.data"></icon-nav>
+			<coupon-list v-else-if="item.type == 'coupon'"></coupon-list>
+			
+			<template v-else-if="item.type == 'promotion'">
+				<view class="divider"></view>
+				<view class="flex align-center py-3 px-2">
+					<text class="font-md font-weight-bold">{{ item.listType == 'group' ? '拼团' : '秒杀' }}</text>
+				</view>
+				<scroll-view scroll-x="true" class="scroll-row">
+					<course-list v-for="(item,index) in groupList" :key="index" :item="item"></course-list>
+				</scroll-view>
+			</template>
+			<template v-else-if="item.type == 'list'">
+				<view class="divider"></view>
+				<view class="flex align-center justify-between py-3 px-2">
+					<text class="font-md font-weight-bold">{{ item.title }}</text>
+					<text class="font-sm text-light-muted" v-if="item.showMore">查看更新</text>
+				</view>
+				<view>
+					<course-list :type="item.listType" v-for="(item,index) in item.data" :key="index" :item="item"></course-list>
+				</view>
+			</template>
+			<template v-else-if="item.type == 'imageAd'">
+				<view class="divider"></view>
+				<image :src="item.data" mode="aspectFill" style="width: 750rpx;height: 360rpx;"></image>
+			</template>
+		</block>
+
+		
+		
+		
+		
+	</view>
+</template>
+
+<script>
+	import api from '@/api/request.js';
+	export default {
+		data() {
+			return {
+				groupList:[{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				},{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				}],
+				
+				templates:[]
+			}
+		},
+		onPullDownRefresh() {
+			this.getData()
+		},
+		created() {
+			this.getData()
+		},
+		methods: {
+			getData(){
+				// uni.request({
+				// 	url: 'http://ceshi8.dishaxy.com/mobile/index',
+				// 	method: 'GET',
+				// 	header:{
+				// 		appid:"bd9d01ecc75dbbaaefce"
+				// 	},
+				// 	success: res => {
+				// 		if(res.statusCode != 200 || res.data.msg == 'fail'){
+				// 			uni.showToast({
+				// 				title: res.data.data || '请求失败',
+				// 				icon: 'none'
+				// 			});
+				// 			return
+				// 		}
+				// 		this.templates = res.data.data
+				// 	},
+				// 	fail: (err) => {
+				// 		console.log(err);
+				// 	},
+				// 	complete: () => {
+				// 		uni.stopPullDownRefresh()
+				// 	}
+				// });
+				
+				
+				api.request({
+					url:"/mobile/index"
+				}).then(data=>{
+					let [error,res] = data
+					if(res.statusCode != 200 || res.data.msg == 'fail'){
+						uni.showToast({
+							title: res.data.data || '请求失败',
+							icon: 'none'
+						});
+						return
+					}
+					this.templates = res.data.data
+				})
+				
+			}
+		}
+	}
+</script>
+
+<style>
+	
+</style>
+
+```
 
 ### 4.9 响应拦截器封装
 
+`api/request.js`
+
+```javascript
+export default {
+	config:{
+		baseURL:"http://ceshi8.dishaxy.com",
+		appid:"bd9d01ecc75dbbaaefce",
+		// 请求拦截器
+		beforeRequest(options = {}){
+			return new Promise((resolve,reject)=>{
+				// 公共参数处理
+				options.url = this.baseURL + options.url 
+				options.method = options.method || 'GET'
+				options.header = {
+					appid:this.appid
+				}
+				
+				// 权限相关验证
+				
+				resolve(options)
+			})
+		},
+		// 响应拦截器
+		handleResponse([error,res]){
+			return new Promise((resolve,reject)=>{
+				// 错误提示处理
+				if(res.statusCode != 200 || res.data.msg == 'fail'){
+					let msg = res.data.data || '请求失败'
+					uni.showToast({
+						title: msg,
+						icon: 'none'
+					});
+					return reject(msg)
+				}
+				resolve(res.data.data)
+			})
+		}
+	},
+	request(options = {}){
+		return this.config.beforeRequest(options).then(opt=>uni.request(opt)).then(this.config.handleResponse)
+	},
+	// GET请求
+	get(url,params = null,options = {}){
+		options.url = url
+		
+		options.url += params ? ('?'+Object.keys(params).map(key=>key+'='+params[key]).join('&')) : ''
+		
+		options.method = 'GET'
+		return this.request(options)
+	},
+	// POST请求
+	post(url,data = {},options = {}){
+		options.url = url
+		options.method = 'POST'
+		options.data = data
+		return this.request(options)
+	}
+}
+```
+
+`api/api.js`
+
+```javascript
+import api from './request.js';
+export default {
+	// 获取首页数据
+	getIndexData(){
+		return api.get("/mobile/index")
+	}
+}
+```
+
+`pages/index/index.vue`
+
+```vue
+<template>
+	<view>
+		<block v-for="(item,index) in templates" :key="index">
+			<f-search-bar v-if="item.type == 'search'" :placeholder="item.placeholder"></f-search-bar>
+			<swiper v-else-if="item.type == 'swiper'" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" style="height: 310rpx;">
+				<swiper-item class="flex justify-center" v-for="(s,sI) in item.data" :key="sI">
+					<image :src="s.src" mode="aspectFill" style="width: 720rpx;height: 300rpx;" class="rounded shadow"></image>
+				</swiper-item>
+			</swiper>
+			<icon-nav v-else-if="item.type == 'icons'" :list="item.data"></icon-nav>
+			<coupon-list v-else-if="item.type == 'coupon'"></coupon-list>
+			
+			<template v-else-if="item.type == 'promotion'">
+				<view class="divider"></view>
+				<view class="flex align-center py-3 px-2">
+					<text class="font-md font-weight-bold">{{ item.listType == 'group' ? '拼团' : '秒杀' }}</text>
+				</view>
+				<scroll-view scroll-x="true" class="scroll-row">
+					<course-list v-for="(item,index) in groupList" :key="index" :item="item"></course-list>
+				</scroll-view>
+			</template>
+			<template v-else-if="item.type == 'list'">
+				<view class="divider"></view>
+				<view class="flex align-center justify-between py-3 px-2">
+					<text class="font-md font-weight-bold">{{ item.title }}</text>
+					<text class="font-sm text-light-muted" v-if="item.showMore">查看更新</text>
+				</view>
+				<view>
+					<course-list :type="item.listType" v-for="(item,index) in item.data" :key="index" :item="item"></course-list>
+				</view>
+			</template>
+			<template v-else-if="item.type == 'imageAd'">
+				<view class="divider"></view>
+				<image :src="item.data" mode="aspectFill" style="width: 750rpx;height: 360rpx;"></image>
+			</template>
+		</block>
+
+		
+		
+		
+		
+	</view>
+</template>
+
+<script>
+	export default {
+		data() {
+			return {
+				groupList:[{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				},{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				}],
+				
+				templates:[]
+			}
+		},
+		onPullDownRefresh() {
+			this.getData()
+		},
+		created() {
+			this.getData()
+		},
+		methods: {
+			getData(){
+				this.$api.getIndexData().then(data=>{
+					this.templates = data
+				})
+			}
+		}
+	}
+</script>
+
+<style>
+	
+</style>
+
+```
+
+
+
 ### 4.10 骨架屏加载优化
+
+`components/skeleton/skeleton.vue`
+
+```vue
+<template>
+	<view style="background-color: rgb(245, 245, 241);" :style="getStyle" :class="getClass">
+		
+	</view>
+</template>
+
+<script>
+	export default {
+		name:"skeleton",
+		props: {
+			width: {
+				type: [Number,String],
+				default: 0
+			},
+			height: {
+				type: [Number,String],
+				default: 0
+			},
+			circle:{
+				type:Boolean,
+				default:false
+			},
+			oClass:{
+				type: String,
+				default: ''
+			}
+		},
+		computed: {
+			getStyle() {
+				return `width:${this.width};height:${this.height};`
+			},
+			getClass(){
+				let c = ''
+				if(this.circle){
+					c += 'rounded-circle'
+				}
+				return `${c} ${this.oClass}`
+			}
+		},
+		data() {
+			return {
+				
+			};
+		}
+	}
+</script>
+
+<style>
+
+</style>
+
+```
+
+`pages/index/index-skeleton.vue`
+
+```vue
+<template>
+	<view>
+		<view class="p-2">
+			<skeleton width="710rpx" height="75rpx" oClass="mb-2 rounded"></skeleton>
+			<skeleton width="710rpx" height="300rpx" oClass="rounded"></skeleton>
+		</view>
+		<view class="flex flex-wrap py-2">
+			<view class="flex flex-column align-center justify-center"
+			style="width: 25%;" v-for="i in 8" :key="i">
+				<skeleton width="75rpx" height="75rpx" circle oClass="mb-2"></skeleton>
+				<skeleton width="75rpx" height="30rpx" oClass="mb-2"></skeleton>
+			</view>
+		</view>
+		<view class="flex flex-wrap py-2">
+			<view class="flex align-center justify-center" style="width: 50%;"> 
+				<skeleton width="354rpx" height="130rpx" oClass="mb-2"></skeleton>
+			</view>
+			<view class="flex align-center justify-center" style="width: 50%;">
+				<skeleton width="354rpx" height="130rpx" oClass="mb-2"></skeleton>
+			</view>
+		</view>
+		<view class="p-2">
+			<skeleton width="70rpx" height="35rpx"></skeleton>
+		</view>
+		<view class="flex p-2">
+			<skeleton width="300rpx" height="170rpx"></skeleton>
+			<view class="ml-2">
+				<skeleton width="364rpx" height="38rpx" oClass="mb-2"></skeleton>
+				<skeleton width="120rpx" height="25rpx" oClass="mb-2"></skeleton>
+				<skeleton width="170rpx" height="43rpx"></skeleton>
+			</view>
+		</view>
+	</view>
+</template>
+
+<script>
+</script>
+
+<style>
+</style>
+
+```
+
+
 
 ### 4.22 首页数据交互完善
 
+`api/api.js`
+
+```javascript
+import api from './request.js';
+export default {
+	// 获取首页数据
+	getIndexData(){
+		return api.get("/mobile/index")
+	},
+	// 获取可用秒杀列表
+	getFlashsale(params = {}){
+		return api.get("/mobile/flashsale",params)
+	},
+	// 获取可用拼团列表
+	getGroup(params = {}){
+		return api.get("/mobile/group",params)
+	}
+}
+```
+
+`pages/index/index.vue`
+
+```vue
+<template>
+	<view>
+		
+		<index-skeleton v-if="loading"></index-skeleton>
+		
+		<view class="animate__animated animate__fadeIn animate__fast" v-else>
+			<block v-for="(item,index) in templates" :key="index">
+				<f-search-bar v-if="item.type == 'search'" :placeholder="item.placeholder"></f-search-bar>
+				<swiper v-else-if="item.type == 'swiper'" :indicator-dots="true" :autoplay="true" :interval="3000" :duration="1000" style="height: 310rpx;">
+					<swiper-item class="flex justify-center" v-for="(s,sI) in item.data" :key="sI">
+						<image :src="s.src" mode="aspectFill" style="width: 720rpx;height: 300rpx;" class="rounded shadow"></image>
+					</swiper-item>
+				</swiper>
+				<icon-nav v-else-if="item.type == 'icons'" :list="item.data"></icon-nav>
+				<coupon-list v-else-if="item.type == 'coupon'"></coupon-list>
+				
+				<view v-else-if="item.type == 'promotion'">
+					<active-list :type="item.listType"></active-list>
+				</view>
+				<view v-else-if="item.type == 'list'">
+					<view class="divider"></view>
+					<view class="flex align-center justify-between py-3 px-2">
+						<text class="font-md font-weight-bold">{{ item.title }}</text>
+						<text class="font-sm text-light-muted" v-if="item.showMore">查看更新</text>
+					</view>
+					<view>
+						<course-list :type="item.listType" v-for="(item,index) in item.data" :key="index" :item="item"></course-list>
+					</view>
+				</view>
+				<view v-else-if="item.type == 'imageAd'">
+					<view class="divider"></view>
+					<image :src="item.data" mode="aspectFill" style="width: 750rpx;height: 360rpx;"></image>
+				</view>
+				
+			</block>
+		</view>
+		
+	</view>
+</template>
+
+<script>
+	import indexSkeleton from './index-skeleton.vue';
+	export default {
+		components: {
+			indexSkeleton
+		},
+		data() {
+			return {
+				loading:false,
+				groupList:[{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				},{
+					"id": 19,
+					"goods_id": 12,
+					"title": "unicloud商城全栈开发",
+					"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+					"price": "4.00",
+					"t_price": "10.00",
+					"type": "media",
+					"start_time": "2021-04-15T16:00:00.000Z",
+					"end_time": "2022-05-16T16:00:00.000Z"
+				}],
+				
+				templates:[]
+			}
+		},
+		onPullDownRefresh() {
+			this.getData()
+		},
+		created() {
+			this.loading = true
+			this.getData()
+		},
+		methods: {
+			getData(){
+				this.$api.getIndexData().then(data=>{
+					this.templates = data
+				}).finally(()=>{
+					this.loading = false
+					uni.stopPullDownRefresh()
+				})
+			}
+		}
+	}
+</script>
+
+<style>
+	
+</style>
+
+```
+
+`components/active-list/active-list.vue`
+
+```vue
+<template>
+	<view>
+		<view class="divider"></view>
+		<view class="flex align-center py-3 px-2">
+			<text class="font-md font-weight-bold">{{ type == 'group' ? '拼团' : '秒杀' }}</text>
+		</view>
+		<scroll-view scroll-x="true" class="scroll-row">
+			<course-list v-for="(item,index) in list" :key="index" :item="item"></course-list>
+		</scroll-view>
+	</view>
+</template>
+
+<script>
+	export default {
+		name:"active-list",
+		props: {
+			type: {
+				type: String,
+				default: 'group'
+			},
+		},
+		data() {
+			return {
+				list:[]
+			};
+		},
+		created() {
+			let k = this.type == 'group' ? 'getGroup' : 'getFlashsale'
+			this.$api[k]({
+				usable:1
+			}).then(res=>{
+				this.list = res.rows
+			})
+		}
+	}
+</script>
+
+<style>
+
+</style>
+
+```
+
+
+
 ## 五、登录注册模块开发
+
+### 5.1 登录注册页开发
+
+### 5.2 注册功能交互实现
+
+### 5.3 登录功能交互实现
+
+### 5.4 初始化用户功能实现
+
+### 5.5 验证同意隐私声明
+
+### 5.6 绑定手机号功能开发
+
+### 5.7 忘记密码功能开发
 
 ## 六、个人中心模块开发
 
+### 6.1 个人中心页功能开发
+
+### 6.2 个人设置页开发
+
+### 6.3 退出登录功能实现
+
+### 6.4 权限验证跳转
+
+### 6.5 修改密码页功能开发
+
+### 6.6 缓存计算和清除缓存
+
+### 6.7 修改资料页开发
+
+### 6.8 上传文件功能实现
+
+### 6.9 修改资料功能开发
+
+### 6.10 我的订单功能开发
+
 ## 七、优惠卷模块开发
+
+### 7.1 首页优惠卷列表功能开发
+
+### 7.2 领取优惠卷功能实现
+
+### 7.3 登录退出后优惠卷状态处理
+
+### 7.4 我的优惠卷列表功能开发
 
 ## 八、搜索页和列表页开发
 
+### 8.1 搜索页功能开发
+
+### 8.2 搜索结果页功能开发
+
 ## 九、图文、音频和视频课程模块开发
 
+### 9.1 课程详情页功能开发
+
+### 9.2 图文课程详情功能开发
+
+### 9.3 视频课程详情功能开发
+
+### 9.4 音频课程详情功能开发
+
 ## 十、专栏模块开发
+
+### 10.1 专栏详情页开发
+
+### 10.2 专栏详情页功能开发
 
 ## 十一、学习进度模块开发
 
@@ -909,3 +2039,13 @@
 ## 十六、直播模块开发
 
 ## 十七、多端兼容与项目部署
+
+### 17.1 兼容微信小程序端处理
+
+### 17.2 兼容APP端处理
+
+### 17.3 项目前端部署
+
+### 17.4 项目服务端部署
+
+### 17.5 小程序分包加载

@@ -1,6 +1,6 @@
 <template>
 	<view class="p-2">
-		<scroll-view class="scroll-view" scroll-x="true" >
+		<scroll-view class="scroll-row" scroll-x="true" >
 			<view class="coupon" v-for="(item,index) in data" :key="index">
 				<view>
 					<text>￥{{item.price}}</text>
@@ -32,10 +32,6 @@
 </script>
 
 <style>
-	.scroll-view {
-		white-space: nowrap;
-		width: 100%;
-	}
 	.coupon{
 		display: inline-flex;
 		min-width: 310rpx;

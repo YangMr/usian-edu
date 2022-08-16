@@ -95,6 +95,12 @@
 	/* #endif */
 	flex-direction:row!important;
 }
+.inline-flex{
+	/* #ifndef APP-PLUS-NVUE */
+	display:inline-flex!important;
+	/* #endif */
+	flex-direction:row!important;
+}
 .flex-row{ flex-direction:row!important; }
 .flex-column{ flex-direction:column!important; }
 .flex-row-reverse{ flex-direction:row-reverse!important; }

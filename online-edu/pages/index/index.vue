@@ -11,10 +11,58 @@
 
 		<!-- 优惠卷 -->
 		<i-coupon :data="couponList"></i-coupon>
+
+		<view class="divider"></view>
+
+		<!-- 拼团 -->
+		<view class="px-2">
+			<i-list-title><template v-slot:title>拼团</template></i-list-title>
+			<i-course-list :data="groupList" type="column"></i-course-list>
+		</view>
+
+		<view class="divider"></view>
+
+		<!-- 最新列表 -->
+		<view class="px-2">
+			<i-list-title>
+				<template v-slot:title>最新列表</template>
+				<template v-slot:sub-title>查看全部</template>
+			</i-list-title>
+			<i-course-list :data="groupList" type="row"></i-course-list>
+		</view>
+
+		<view class="divider"></view>
+
+		<!-- 热门推荐 -->
+		<!-- <view class="px-2">
+			<i-list-title>
+				<template v-slot:title>热门推荐</template>
+				<template v-slot:sub-title>查看更多</template>
+			</i-list-title>
+			<view>
+				<i-course-item :item="item"  v-for="(item,index) in groupList" :key="index"></i-course-item>
+			</view>
+		</view> -->
+	
+		<view class="divider"></view>	
+			
+		<view class="advert">
+			<image src="../../static/demo/cover/1.png" mode="aspectFill"></image>
+		</view>
+		
 	</view>
 </template>
 
 <script>
+	/**
+	 * 1. http请求封装
+	 * 	  http请求
+	 *    请求拦截器
+	 *    响应拦截器
+	 *    错误信息提示
+	 * 2. api接口进行封装	
+	 * 3. 调用api接口,进行数据渲染
+	 */
 	export default {
 		data() {
 			return {
@@ -58,8 +106,7 @@
 					src: "/static/demo/icon/ask.png",
 					name: "社区",
 				}],
-				couponList : [
-					{
+				couponList: [{
 						c_num: 300000,
 						end_time: "2025-08-22T16:00:00.000Z",
 						goods_id: 1636,
@@ -69,7 +116,10 @@
 						received_num: 19,
 						start_time: "2022-07-14T16:00:00.000Z",
 						type: "course",
-						value: {id: 1636, title: "中级经济法-知识点精讲课"}
+						value: {
+							id: 1636,
+							title: "中级经济法-知识点精讲课"
+						}
 					},
 					{
 						c_num: 10000,
@@ -81,7 +131,10 @@
 						received_num: 141,
 						start_time: "2021-09-09T16:00:00.000Z",
 						type: "column",
-						value: {id: 184, title: "VueCli 实战商城后台管理系统"}
+						value: {
+							id: 184,
+							title: "VueCli 实战商城后台管理系统"
+						}
 					},
 					{
 						c_num: 100000,
@@ -93,7 +146,10 @@
 						received_num: 121,
 						start_time: "2021-06-28T17:58:01.000Z",
 						type: "course",
-						value: {id: 6, title: "VueCli 实战在线教育后台系统"}
+						value: {
+							id: 6,
+							title: "VueCli 实战在线教育后台系统"
+						}
 					},
 					{
 						c_num: 100000,
@@ -105,7 +161,10 @@
 						received_num: 88,
 						start_time: "2021-05-15T17:03:00.000Z",
 						type: "course",
-						value: {id: 11, title: "uni-app实战直播app全栈开发"}
+						value: {
+							id: 11,
+							title: "uni-app实战直播app全栈开发"
+						}
 					},
 					{
 						c_num: 10000,
@@ -117,9 +176,56 @@
 						received_num: 82,
 						start_time: "2021-05-15T17:02:00.000Z",
 						type: "course",
-						value: {id: 12, title: "unicloud商城全栈开发"}
+						value: {
+							id: 12,
+							title: "unicloud商城全栈开发"
+						}
+					}
+				],
+				groupList: [{
+						"id": 19,
+						"goods_id": 12,
+						"title": "unicloud商城全栈开发",
+						"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+						"price": "4.00",
+						"t_price": "10.00",
+						"type": "media",
+						"start_time": "2021-04-15T16:00:00.000Z",
+						"end_time": "2022-05-16T16:00:00.000Z"
+					}, {
+						"id": 19,
+						"goods_id": 12,
+						"title": "unicloud商城全栈开发",
+						"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+						"price": "4.00",
+						"t_price": "10.00",
+						"type": "media",
+						"start_time": "2021-04-15T16:00:00.000Z",
+						"end_time": "2022-05-16T16:00:00.000Z"
+					},
+					{
+						"id": 19,
+						"goods_id": 12,
+						"title": "unicloud商城全栈开发",
+						"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+						"price": "4.00",
+						"t_price": "10.00",
+						"type": "column",
+						"start_time": "2021-04-15T16:00:00.000Z",
+						"end_time": "2022-05-16T16:00:00.000Z"
+					}, {
+						"id": 19,
+						"goods_id": 12,
+						"title": "unicloud商城全栈开发",
+						"cover": "http://demo-mp3.oss-cn-shenzhen.aliyuncs.com/egg-edu-demo/79023e0596c23aff09e6.png",
+						"price": "4.00",
+						"t_price": "10.00",
+						"type": "media",
+						"start_time": "2021-04-15T16:00:00.000Z",
+						"end_time": "2022-05-16T16:00:00.000Z"
 					}
 				]
+
 			}
 		},
 		onLoad() {
@@ -138,5 +244,8 @@
 </script>
 
 <style>
-	
+.advert{
+	width: 750rpx;
+	height: 360rpx;
+}	
 </style>

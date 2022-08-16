@@ -46,8 +46,4 @@ swiper .swiper-item{
 	height: 310rpx;
 	overflow: hidden;
 }
-swiper .swiper-item image{
-	width: 100%;
-	height: 100%;
-}
 </style>
