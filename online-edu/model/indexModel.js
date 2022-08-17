@@ -15,25 +15,20 @@ class IndexModel extends Http {
 	static getMobileICoupon(){
 		return Http.request({
 			url : '/mobile/coupon',
-			method : 'GET',
-			data : {
-				a : '1'
-			},
-			header : {
-				appid : 'bd9d01ecc75dbbaaefce'
-			}
+			method : 'GET'
 		})
 	}
 	
 	/**
-	 * 获取可用拼团列表接口
+	 * 获取拼团列表/秒杀列表接口
 	 */
-	
-	
-	
-	/**
-	 * 获取可用秒杀列表
-	 */
+	static getMobileActivity(type,data){
+		return  Http.request({
+			url : '/mobile/' + type,
+			method : 'GET',
+			data
+		})
+	}
 }
 
 export default IndexModel
