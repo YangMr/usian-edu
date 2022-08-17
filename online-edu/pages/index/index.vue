@@ -1,54 +1,45 @@
 <template>
 	<view class="container">
-		<!-- 搜索框 -->
-		<i-search-bar></i-search-bar>
-
-		<!-- 轮播图 -->
-		<i-swiper :data="bannerData" @click="handleToDetail"></i-swiper>
-
-		<!-- 导航栏 -->
-		<i-nav :data="navList"></i-nav>
-
-		<!-- 优惠卷 -->
-		<i-coupon :data="couponList"></i-coupon>
-
-		<view class="divider"></view>
-
-		<!-- 拼团 -->
-		<view class="px-2">
-			<i-list-title><template v-slot:title>拼团</template></i-list-title>
-			<i-course-list :data="groupList" type="column"></i-course-list>
-		</view>
-
-		<view class="divider"></view>
-
-		<!-- 最新列表 -->
-		<view class="px-2">
-			<i-list-title>
-				<template v-slot:title>最新列表</template>
-				<template v-slot:sub-title>查看全部</template>
-			</i-list-title>
-			<i-course-list :data="groupList" type="row"></i-course-list>
-		</view>
-
-		<view class="divider"></view>
-
-		<!-- 热门推荐 -->
-		<!-- <view class="px-2">
-			<i-list-title>
-				<template v-slot:title>热门推荐</template>
-				<template v-slot:sub-title>查看更多</template>
-			</i-list-title>
-			<view>
-				<i-course-item :item="item"  v-for="(item,index) in groupList" :key="index"></i-course-item>
-			</view>
-		</view> -->
 	
-		<view class="divider"></view>	
+		<block v-for="(item,index) in template" :key="index">
+			<!-- 搜索框 -->
+			<i-search-bar v-if="item.type === 'search'" :placeholder="item.placeholder"></i-search-bar>
 			
-		<view class="advert">
-			<image src="../../static/demo/cover/1.png" mode="aspectFill"></image>
-		</view>
+			<!-- 轮播图 -->
+			<i-swiper v-else-if="item.type === 'swiper'" :data="item.data" @click="handleToDetail"></i-swiper>
+			
+			<!-- 导航栏 -->
+			<i-nav v-else-if="item.type === 'icons'" :data="item.data"></i-nav>
+			
+			<!-- 优惠卷 -->
+			<i-coupon  v-else-if="item.type === 'coupon'" :data="couponList"></i-coupon>
+			
+			<view v-if="item.type === 'coupon'" class="divider"></view>
+			
+			<!-- 拼团 -->
+			<view class="px-2"  v-if="item.type === 'promotion'">
+				<i-list-title><template v-slot:title>{{ item.listType == 'group' ? '拼团' : '秒杀' }}</template></i-list-title>
+				<i-course-list :data="groupList" type="column"></i-course-list>
+			</view>
+			
+			<view  v-if="item.type === 'promotion'" class="divider"></view>
+			
+			<!-- 最新列表 -->
+			<view class="px-2" v-if="item.type === 'list'">
+				<i-list-title>
+					<template v-slot:title>{{item.title}}</template>
+					<template v-slot:sub-title>查看全部</template>
+				</i-list-title>
+				<i-course-list :data="item.data" type="row"></i-course-list>
+			</view>
+			
+			<view v-if="item.type === 'list'" class="divider"></view>
+				
+			<view class="advert" v-if="item.type === 'imageAd'">
+				<image :src="item.data" mode="aspectFill"></image>
+			</view>
+			
+		</block>
 		
 	</view>
 </template>
@@ -63,49 +54,11 @@
 	 * 2. api接口进行封装	
 	 * 3. 调用api接口,进行数据渲染
 	 */
+	import IndexModel from "@/model/indexModel"
 	export default {
 		data() {
 			return {
-				bannerData: [{
-						course_id: 538,
-						course_title: "VueCli 实战商城后台管理系统",
-						src: "https://tangzhe123-com.oss-cn-shenzhen.aliyuncs.com/dishaweb/08C9150BC2B163AEC012D6E544C75DD2.png",
-						type: "webview",
-						url: "http://www.dishaxy.com"
-					},
-					{
-						course_id: 538,
-						course_title: "VueCli 实战商城后台管理系统",
-						src: "https://tangzhe123-com.oss-cn-shenzhen.aliyuncs.com/dishaweb/96bd39ce1d334b8493bac12bb1aa4223.png",
-						type: "course",
-						url: ""
-					}
-				],
-				navList: [{
-					src: "/static/demo/icon/hd.png",
-					name: "活动",
-				}, {
-					src: "/static/demo/icon/test.png",
-					name: "考试",
-				}, {
-					src: "/static/demo/icon/ms.png",
-					name: "秒杀",
-				}, {
-					src: "/static/demo/icon/pt.png",
-					name: "拼团",
-				}, {
-					src: "/static/demo/icon/course.png",
-					name: "直播",
-				}, {
-					src: "/static/demo/icon/column.png",
-					name: "专栏",
-				}, {
-					src: "/static/demo/icon/book.png",
-					name: "电子书",
-				}, {
-					src: "/static/demo/icon/ask.png",
-					name: "社区",
-				}],
+				template : [],
 				couponList: [{
 						c_num: 300000,
 						end_time: "2025-08-22T16:00:00.000Z",
@@ -229,7 +182,7 @@
 			}
 		},
 		onLoad() {
-
+			this.getIndexData()
 		},
 		methods: {
 			/** 点击轮播图跳转到详情页
@@ -238,6 +191,11 @@
 			handleToDetail(item) {
 				// TODO 点击跳转到对应的详情页面, 并且还需要将id传过去
 				console.log(item)
+			},
+			async getIndexData(){
+				const response = await IndexModel.getMobileIndex()
+				console.log(response)
+				this.template = response
 			}
 		}
 	}
@@ -246,6 +204,6 @@
 <style>
 .advert{
 	width: 750rpx;
-	height: 360rpx;
+	height: 340rpx;
 }	
 </style>

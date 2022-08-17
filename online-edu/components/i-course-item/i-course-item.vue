@@ -4,11 +4,11 @@
 			<image :src="item.cover"></image>
 			<view class="type position-absolute font-sm">{{item.type|fliterGroupType}}</view>
 		</view>
-		<view class="flex flex-column flex-1">
-			<text class="text-ellipsis font-md">{{item.title}}</text>
-			<text v-if="item.count" class="font-sm text-light-muted my-1">{{item.count}}人已抢</text>
+		<view class="flex flex-column flex-1 " >
+			<view class="text-ellipsis font-md" style="width: 400rpx;">{{item.title}}</view>
 			<view class="flex flex-1 align-end">
 				<text class="font-md text-danger">¥{{item.price}}</text>
+				<text v-if="item.count" class="font-sm text-light-muted my-1">{{item.count}}人已抢</text>
 				<text class="font-sm text-light-muted text-through">¥{{item.t_price}}</text>
 			</view>
 		</view>

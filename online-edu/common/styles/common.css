@@ -25,11 +25,10 @@
 /**
  * 设置页面高度为100%
  */
-page{
+/* page{
 	height: 100%;
-}
+} */
 .container{
-	height : 100%;
 	padding:0;
 }
 image{
