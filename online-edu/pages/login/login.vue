@@ -121,12 +121,36 @@
 					const response = await UserModel.userLogin(data)
 					this.resetForm()
 					this.$store.dispatch("setUser", response)
-					console.log("Response",response)
+					
+					this.handleToBindPhonePage()
+					
+					uni.navigateBack({
+						delta:1
+					})
 				}catch(err){
 					console.log(err)
 				}finally{
 					uni.hideLoading()
 				}	
+			},
+			/**
+			 * 如果用户登录之后,没有绑定手机号,则跳转到绑定手机号的页面
+			 */
+			handleToBindPhonePage(){
+				const user = this.$store.state.user
+				if(!user.phone){
+					
+					// 跳转到绑定手机号的页面
+					setTimeout(()=>{
+						uni.redirectTo({
+							url:"/pages/bind-phone/bind-phone"
+						})
+					},350)
+					
+					// this.navigator.to("/pages/bind-phone/bind-phone")
+					// 并且不再继续往下执行
+					return
+				}
 			},
 			/**
 			 * 清空表单方法
@@ -150,79 +174,5 @@
 </script>
 
 <style>
-	.login-bg {
-		height: 220rpx;
-		background: linear-gradient(120deg, #3BFDAF 0%, #70D6F2 100%);
-	}
-
-	.login-back {
-		position: absolute;
-		width: 100rpx;
-		height: 100rpx;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-		left: 0;
-		top: 0;
-	}
-
-	.login {
-		position: absolute;
-		left: 0;
-		right: 0;
-		top: 200rpx;
-		height: 300rpx;
-		background-color: #fff;
-		border-top-left-radius: 30rpx;
-		border-top-right-radius: 30rpx;
-		padding: 60rpx 70rpx 0 70rpx;
-	}
-
-	.title {
-		font-size: 22px;
-		margin-bottom: 50rpx;
-		color: #35404b;
-	}
-
-	.login-form {
-		position: relative;
-		margin-bottom: 50rpx;
-	}
-
-	.login-form .uni-icons {
-		position: absolute;
-		width: 100rpx;
-		height: 100rpx;
-		color: #272727;
-		left: 0;
-		top: 0;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.login-form input {
-		background-color: #f5f5f5;
-		height: 100rpx;
-		padding: 0 20rpx 0 100rpx;
-	}
-
-	.login-button {
-		color: #fff;
-		height: 100rpx;
-		border-radius: 10rpx;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
-
-	.wechat-login {
-		width: 47px;
-		height: 47px;
-		border-radius: 50%;
-		border: 1px solid #5ccc84;
-		display: flex;
-		align-items: center;
-		justify-content: center;
-	}
+	
 </style>

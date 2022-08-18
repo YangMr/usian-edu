@@ -1,11 +1,15 @@
 import APIConfig from "@/config/config"
 import exceptionMessage from "@/config/exception-message"
+import store from "@/store/index"
 class Http {
 	// 请求拦截器
 	static async _beforeRequest(config){
-		config.header = {
-			appid : APIConfig.appid
-		}
+		// 获取vuex中token
+		const token = store.state.token
+		if(token) config.header.token = token
+		
+		config.header.appid = APIConfig.appid
+			
 		return config
 	}
 	

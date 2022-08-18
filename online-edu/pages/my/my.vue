@@ -1,6 +1,6 @@
 <template>
 	<view>
-		我的
+		<button type="default" @click="handleToLoginPage">登录</button>
 	</view>
 </template>
 
@@ -12,7 +12,9 @@
 			}
 		},
 		methods: {
-			
+			handleToLoginPage(){
+				this.navigator.to("/pages/login/login")
+			}
 		}
 	}
 </script>
