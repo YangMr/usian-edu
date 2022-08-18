@@ -7,6 +7,12 @@
 .bg-coupon{
 	background-color: #d39e00;
 }
+.bg-main-hover{
+	background-color: #4bc175;
+}
+.bg-main-disabled{
+	background-color: #7be09f;
+}
 
 /**
  * 主文字色
